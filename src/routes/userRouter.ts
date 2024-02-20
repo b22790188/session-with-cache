@@ -1,6 +1,5 @@
 import express from 'express';
 import { Request, Response } from 'express';
-import { redisClient } from '..';
 import getUserData from '../model/getUserData';
 
 const router = express.Router();

@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import { createClient } from 'redis';
 import RedisStore from 'connect-redis';
 import userRouter from './routes/userRouter';
+import redisStore from './service/connect_redis';
 
 //todo: understand why
 declare module 'express-session' {
@@ -16,22 +17,9 @@ declare module 'express-session' {
 const app = express();
 const port = process.env.PORT || 3000;
 
-//todo: modify type
-export let redisClient = createClient();
-
-(async () => {
-  await redisClient
-    .on('error', (err) => {
-      console.log('Redis error' + err);
-    })
-    .connect();
-  console.log('connect redis success');
-})();
-
-const redisStore = new RedisStore({
-  client: redisClient,
-});
-
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(cookieParser());
 app.use(
   session({
     store: redisStore,
@@ -45,9 +33,6 @@ app.use(
     },
   })
 );
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-app.use(cookieParser());
 
 app.use('/login', userRouter);
 
