@@ -1,44 +1,43 @@
 import express from 'express';
 import { Request, Response } from 'express';
 import { redisClient } from '..';
+import getUserData from '../model/getUserData';
+
 const router = express.Router();
 
-const fakeData: { [key: string]: string } = {
-  admin: 'admin',
-  user: 'user',
-};
-
 //todo: move function to service folder
-async function checkCache(
-  req: Request
-): Promise<string | undefined> {
-  const username = req.body.username;
-  let data = await redisClient.get(username);
-  if (data) {
-    return data;
+async function checkCache(req: Request): Promise<boolean | undefined> {   
+  try{
+    let login = req.session.login;
+    return login
   }
-}
+  catch(err){
+    console.log(err);
+  }
 
+}
 
 router.post('/', async function (req: Request, res: Response, next: any) {
   const { username, password } = req.body;
-  // console.log(req.session);
   let dataCached = await checkCache(req);
   if (dataCached) {
     res.json({
-      data: dataCached,
+      data: req.session.user,
       info: 'data from cache',
     });
 
     return;
   }
 
-  if (username in fakeData && fakeData[username] === password) {
+  try{
+    let data = await getUserData(username, password);
+    req.session.login = true;
     req.session.user = username;
-    await redisClient.set(username, password);
-    res.send('Login success');
-  } else {
-    res.send('Login failed');
+    res.send('login success');
+  }
+  catch(err){
+    console.log(err);
+    res.send('login failed');
   }
 });
 

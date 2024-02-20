@@ -1,11 +1,14 @@
 import express, { Request, Response } from 'express';
 import session from 'express-session';
+import cookieParser from 'cookie-parser';
 import { createClient } from 'redis';
 import RedisStore from 'connect-redis';
 import userRouter from './routes/userRouter';
 
+//todo: understand why
 declare module 'express-session' {
   export interface SessionData {
+    login: boolean;
     user: string;
   }
 }
@@ -38,12 +41,13 @@ app.use(
     cookie: {
       secure: false,
       httpOnly: true,
-      maxAge: 1000 * 60 * 60,
+      maxAge: 1000 * 30,
     },
   })
 );
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(cookieParser());
 
 app.use('/login', userRouter);
 
