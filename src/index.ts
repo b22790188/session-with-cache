@@ -4,14 +4,6 @@ import cookieParser from 'cookie-parser';
 import userRouter from './routes/userRouter';
 import redisStore from './service/connect_redis';
 
-//todo: understand why
-declare module 'express-session' {
-  export interface SessionData {
-    login: boolean;
-    user: string;
-  }
-}
-
 const app = express();
 const port = process.env.PORT || 3000;
 
