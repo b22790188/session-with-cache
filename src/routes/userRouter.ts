@@ -4,22 +4,11 @@ import getUserData from '../model/getUserData';
 
 const router = express.Router();
 
-//todo: move function to service folder
-async function checkCache(req: Request): Promise<boolean | undefined> {   
-  try{
-    let login = req.session.login;
-    return login
-  }
-  catch(err){
-    console.log(err);
-  }
-
-}
-
 router.post('/', async function (req: Request, res: Response, next: any) {
   const { username, password } = req.body;
-  let dataCached = await checkCache(req);
-  if (dataCached) {
+  const logined = req.session.login;
+
+  if (logined) {
     res.json({
       data: req.session.user,
       info: 'data from cache',

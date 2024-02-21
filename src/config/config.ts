@@ -8,3 +8,5 @@ export const DBConfig = {
   password: process.env.DB_PASSWORD,
   database: process.env.DATABASE,
 };
+
+export const REDIS_URL = process.env.REDIS_URL

@@ -1,8 +1,6 @@
 import express, { Request, Response } from 'express';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
-import { createClient } from 'redis';
-import RedisStore from 'connect-redis';
 import userRouter from './routes/userRouter';
 import redisStore from './service/connect_redis';
 

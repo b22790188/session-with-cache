@@ -1,5 +1,5 @@
-import { resolve } from 'path';
 import connection from '../service/connect_db';
+import { RowDataPacket } from 'mysql2';
 
 interface errorMessage {
   status: string;
@@ -8,11 +8,12 @@ interface errorMessage {
 }
 
 export default async function getUserData(username: string, password: string) {
-  const sql = 'SELECT * FROM user WHERE username = ? and password = ?';
+  // const sql = 'SELECT * FROM user WHERE username = ? and password = ?';
+  const sql = 'SELECT * FROM user';
   let result: errorMessage = {} as errorMessage;
 
   return new Promise((resolve, reject) => {
-    connection.query(sql, [username, password], (err, data) => {
+    connection.query<RowDataPacket[]>(sql, [username, password], (err, data) => {
       if (err) {
         (result.status = 'database error'), (result.message = '取得資料失敗');
         reject(result);
@@ -24,7 +25,8 @@ export default async function getUserData(username: string, password: string) {
         reject(result);
         return;
       }
-
+      
+      console.log(data);
       result.status = 'success';
       result.message = '取得資料成功';
       result.data = data;

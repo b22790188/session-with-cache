@@ -1,8 +1,10 @@
 import RedisStore from 'connect-redis';
 import { createClient } from 'redis';
+import { REDIS_URL } from '../config/config';
 
-//todo: define type
-const redisClient = createClient();
+const redisClient = createClient({
+  // url: REDIS_URL,
+});
 
 (async () => {
   await redisClient
@@ -19,4 +21,4 @@ const redisStore = new RedisStore({
 });
 
 export default redisStore;
-export { redisClient }
+export { redisClient };
