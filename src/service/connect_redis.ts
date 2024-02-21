@@ -3,7 +3,7 @@ import { createClient } from 'redis';
 import { REDIS_URL } from '../config/config';
 
 const redisClient = createClient({
-  // url: REDIS_URL,
+  url: REDIS_URL,
 });
 
 (async () => {

@@ -1,0 +1,38 @@
+services:
+  backend:
+    container_name: backend
+    build: .
+    restart: on-failure
+    ports:
+      - 3000:3000
+    environment:
+      - DB_HOST=database
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_PORT=${DB_PORT}
+      - DATABASE=${DATABASE}
+      - REDIS_URL=${REDIS_URL}
+    depends_on:
+      - database
+      - redis
+
+  database:
+    container_name: database
+    image: mysql:8
+    restart: on-failure
+    environment:
+      MYSQL_DATABASE: ${DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  redis:
+    container_name: redis
+    restart: on-failure
+    image: redis
+    volumes:
+      - redis-data:/data
+
+volumes:
+  mysql-data:
+  redis-data:
