@@ -4,7 +4,7 @@ import getUserData from '../model/getUserData';
 
 const router = express.Router();
 
-router.post('/', async function (req: Request, res: Response, next: any) {
+router.post('/', async function (req: Request, res: Response) {
   const { username, password } = req.body;
   const logined = req.session.login;
 
@@ -18,7 +18,7 @@ router.post('/', async function (req: Request, res: Response, next: any) {
   }
 
   try{
-    let data = await getUserData(username, password);
+    await getUserData(username, password);
     req.session.login = true;
     req.session.user = username;
     res.send('login success');

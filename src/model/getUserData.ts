@@ -9,7 +9,7 @@ interface errorMessage {
 
 export default async function getUserData(username: string, password: string) {
   const sql = 'SELECT * FROM user WHERE username = ? and password = ?';
-  let result: errorMessage = {} as errorMessage;
+  const result: errorMessage = {} as errorMessage;
 
   return new Promise((resolve, reject) => {
     connection.query<RowDataPacket[]>(
